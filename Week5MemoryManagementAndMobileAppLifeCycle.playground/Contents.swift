@@ -57,6 +57,14 @@ do {
 //: - Write a function to checkout that can throw an error. This function will return the remaining items on the shopping list and the remaining budget in a tuple. If the tax rate is 0.0, return the appropriate error. If the balance is negative, throw the appropriate error. Otherwise, remove everything from the shopping list whose boolean evaluates to true and return everything on the shopping list that wasn't purchased, and return the remaining available budget amount. Do not return a dictionary, but return an array of GroceryItem.
 //: - Write another function to update the tax rate that can throw an error. Take in the appropriate parameter. Be sure to update the total. Throw an error if the new total exceeds the budget.
 
+//:## Week 6:
+//: - In your function to add to cart: Allow for the user to override shopping list errorts and add the item as they entered it anyway; still throw the final error for exceeding budget if necessary.
+//: - Review your code and consider how you might refactor to improve it.
+//: - - Is any function lengthy? Could you extract code make it its own function? Extracting functions improve readability and their access can be reduced to private methods.
+//: - - Is there part of your code that was difficult to write and is difficult to read? Is there another method you can use that's easier to read? Could you write comments to improve readability? Can you rename variables for clarity?
+//: - - Can you improve spacing? Indentation? Capitalization? Other styling?
+
+
 enum GroceryTripError: Error {
     case exceedsBudget
     case itemNotInShoppingList
@@ -103,13 +111,21 @@ class GroceryTrip {
         self.shoppingList = Dictionary(uniqueKeysWithValues: keyValuePairs)
     }
 
-    func addToCart(name: String, quantity: Int, cost: Double) throws {
+    func addToCart(name: String, quantity: Int, cost: Double, overrideShoppingList: Bool = false) throws {
         let shoppingListNames = shoppingList.keys.map{$0.name}
+
+        if overrideShoppingList {
+
+            let groceryItem = GroceryItem(name: name, quantity: quantity, cost: cost)
+            cart.append(groceryItem)
+
+        } else {
 
         guard shoppingListNames.contains(name),
             var shoppingListItem = shoppingList.keys.first(where: {$0.name == name})
-            else {
-                throw GroceryTripError.itemNotInShoppingList }
+        else {
+                throw GroceryTripError.itemNotInShoppingList
+        }
 
         guard shoppingListItem.quantity == quantity else {
             if shoppingListItem.quantity > quantity {
@@ -121,6 +137,7 @@ class GroceryTrip {
         shoppingList[shoppingListItem] = true
         shoppingListItem.update(cost: cost)
         cart.append(shoppingListItem)
+        }
 
         if balance < 0.0 { throw GroceryTripError.exceedsBudget }
     }
