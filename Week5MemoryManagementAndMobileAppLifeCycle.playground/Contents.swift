@@ -54,15 +54,15 @@ do {
 //: - - If the quantity matches, update the dictionary's boolean to true and add the GroceryItem with cost to the cart array. Check the new balance and throw an error if necessary.
 //:
 //: - Write another function to remove an item from the cart. Take in the parameter of GroceryItem. Remove it from the array, and find the matching item in the shopping list (if it exists) and update the dictionary's boolean to false.
-///: - Write a function to checkout that can throw an error. This function will return the remaining items on the shopping list and the remaining budget in a tuple. If the tax rate is 0.0, return the appropriate error. If the balance is negative, throw the appropriate error. Otherwise, remove everything from the shopping list whose boolean evaluates to true and return everything on the shopping list that wasn't purchased, and return the remaining available budget amount. Do not return a dictionary, but return an array of GroceryItem.
+//: - Write a function to checkout that can throw an error. This function will return the remaining items on the shopping list and the remaining budget in a tuple. If the tax rate is 0.0, return the appropriate error. If the balance is negative, throw the appropriate error. Otherwise, remove everything from the shopping list whose boolean evaluates to true and return everything on the shopping list that wasn't purchased, and return the remaining available budget amount. Do not return a dictionary, but return an array of GroceryItem.
 //: - Write another function to update the tax rate that can throw an error. Take in the appropriate parameter. Be sure to update the total. Throw an error if the new total exceeds the budget.
-
 
 enum GroceryTripError: Error {
     case exceedsBudget
     case itemNotInShoppingList
     case itemQuantityExceedsRequiredAmount
     case itemQuantityFallsShortOfRequiredAmount
+    case taxRateError
 }
 
 struct GroceryItem {
@@ -88,7 +88,7 @@ class GroceryTrip {
         return cart.reduce(0.0) { totalCost, groceryItem in
             guard let cost = groceryItem.cost else { return totalCost }
 
-            return totalCost + ( cost * Double(groceryItem.quantity))
+            return (totalCost + ( cost * Double(groceryItem.quantity))) * taxRate
         }
     }
 
@@ -118,7 +118,6 @@ class GroceryTrip {
             throw GroceryTripError.itemQuantityExceedsRequiredAmount
         }
 
-
         shoppingList[shoppingListItem] = true
         shoppingListItem.update(cost: cost)
         cart.append(shoppingListItem)
@@ -132,6 +131,7 @@ class GroceryTrip {
     }
 
     func checkout() throws -> (shoppingList: [GroceryItem], remainingBudget: Double){
+        guard taxRate > 0.0 && taxRate < 1 else { throw GroceryTripError.taxRateError }
         guard balance > 0.0 else { throw GroceryTripError.exceedsBudget }
         let remainingShoppingList = shoppingList.filter { (shoppingListEntry) -> Bool in
             return !shoppingListEntry.value
@@ -148,6 +148,3 @@ class GroceryTrip {
 }
 
 extension GroceryItem: Hashable {}
-
-
-
