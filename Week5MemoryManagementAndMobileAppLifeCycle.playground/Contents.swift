@@ -6,6 +6,10 @@ enum PrinterError: Error {
     case onFire
 }
 
+enum SomeError: Error {
+    case newError
+}
+
 func send(job: Int, toPrinter printerName: String) throws -> String {
     if printerName == "Never Has Toner" {
         throw PrinterError.noToner
@@ -13,12 +17,16 @@ func send(job: Int, toPrinter printerName: String) throws -> String {
     return "Job sent"
 }
 
+func catchThird() throws -> String {
+    throw SomeError.newError
+}
+
 
 //: 1.) Change the printer name to `"Never Has Toner"`, so that the `send(job:toPrinter:)` function throws an error.
 //:
 
 do {
-    let printerResponse = try send(job: 1040, toPrinter: "Bi Sheng")
+    let printerResponse = try send(job: 1040, toPrinter: "Never Has Toner")
     print(printerResponse)
 } catch {
     print(error)
@@ -27,14 +35,19 @@ do {
 //: 2.) Add code to throw an error inside the `do` block. Add an error so that the error is handled by the first `catch` block. Add more errors to trigger the second and third blocks.
 
 do {
-    let printerResponse = try send(job: 1440, toPrinter: "Gutenberg")
-    print(printerResponse)
+    //let printerResponse = try send(job: 1440, toPrinter: "Never Has Toner")   // This wil be catched by 2nd error block
+    //print(printerResponse)
+    //throw PrinterError.onFire   // This will be catched by 1st error block
+    let catchError = try catchThird()      // This will be catched by 3rd error block
+    print(catchError)
+    
 } catch PrinterError.onFire {
     print("I'll just put this over here, with the rest of the fire.")
 } catch let printerError as PrinterError {
     print("Printer error: \(printerError).")
 } catch {
     print(error)
+    print("I'm in 3rd block")
 }
 //:
 //:
@@ -56,3 +69,4 @@ do {
 //: - Write another function to remove an item from the cart. Take in the parameter of GroceryItem. Remove it from the array, and find the matching item in the shopping list (if it exists) and update the dictionary's boolean to false.
 //: - Write a function to checkout that can throw an error. This function will return the remaining items on the shopping list and the remaining budget in a tuple. If the tax rate is 0.0, return the appropriate error. If the balance is negative, throw the appropriate error. Otherwise, remove everything from the shopping list whose boolean evaluates to true and return everything on the shopping list that wasn't purchased, and return the remaining available budget amount. Do not return a dictionary, but return an array of GroceryItem.
 //: - Write another function to update the tax rate that can throw an error. Take in the appropriate parameter. Be sure to update the total. Throw an error if the new total exceeds the budget.
+
