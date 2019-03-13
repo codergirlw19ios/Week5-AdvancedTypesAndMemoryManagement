@@ -4,6 +4,7 @@ enum PrinterError: Error {
     case outOfPaper
     case noToner
     case onFire
+
 }
 
 func send(job: Int, toPrinter printerName: String) throws -> String {
@@ -28,7 +29,10 @@ do {
 
 do {
     let printerResponse = try send(job: 1440, toPrinter: "Gutenberg")
-    print(printerResponse)
+    //let error = "Can't seem to find this printer"
+    //throw PrinterError.onFire --to trigger first catch block
+    throw PrinterError.outOfPaper //to throw second catch block
+    
 } catch PrinterError.onFire {
     print("I'll just put this over here, with the rest of the fire.")
 } catch let printerError as PrinterError {
@@ -56,3 +60,18 @@ do {
 //: - Write another function to remove an item from the cart. Take in the parameter of GroceryItem. Remove it from the array, and find the matching item in the shopping list (if it exists) and update the dictionary's boolean to false.
 //: - Write a function to checkout that can throw an error. This function will return the remaining items on the shopping list and the remaining budget in a tuple. If the tax rate is 0.0, return the appropriate error. If the balance is negative, throw the appropriate error. Otherwise, remove everything from the shopping list whose boolean evaluates to true and return everything on the shopping list that wasn't purchased, and return the remaining available budget amount. Do not return a dictionary, but return an array of GroceryItem.
 //: - Write another function to update the tax rate that can throw an error. Take in the appropriate parameter. Be sure to update the total. Throw an error if the new total exceeds the budget.
+struct GroceryItem: Hashable {
+    var name: String
+    var quanity: Int
+    var cost: Double
+}
+
+//class GroceryTrip {
+//    var budget = Double
+//    var shoppingList = [GroceryItem : Bool]
+//    var cart = [GroceryItem]
+//    
+//    var taxRate
+//    var totalCost =
+//    
+//}
