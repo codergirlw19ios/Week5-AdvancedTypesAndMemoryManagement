@@ -18,7 +18,7 @@ func send(job: Int, toPrinter printerName: String) throws -> String {
 //:
 
 do {
-    let printerResponse = try send(job: 1040, toPrinter: "Bi Sheng")
+    let printerResponse = try send(job: 1040, toPrinter: "Never Has Toner")
     print(printerResponse)
 } catch {
     print(error)
