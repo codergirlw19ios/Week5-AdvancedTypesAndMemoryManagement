@@ -73,6 +73,10 @@ struct GroceryItem: Hashable {
     mutating func updateCost(cost: Double){
         self.cost = cost
     }
+    
+    mutating func updateQuantity(quantity: Int){
+        self.quantity = quantity
+    }
 }
 
 class GroceryTrip {
