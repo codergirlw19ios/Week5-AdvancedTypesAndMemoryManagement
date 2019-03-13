@@ -62,16 +62,31 @@ do {
 //: - Write another function to update the tax rate that can throw an error. Take in the appropriate parameter. Be sure to update the total. Throw an error if the new total exceeds the budget.
 struct GroceryItem: Hashable {
     var name: String
-    var quanity: Int
-    var cost: Double
+    var quantity: Int
+    var cost: Double?
+    
+    init(name: String, quantity: Int, cost: Double?) {
+        self.name = name
+        self.quantity = quantity
+        self.cost = cost
+    }
+    mutating func updateCost(cost: Double){
+        self.cost = cost
+    }
 }
 
-//class GroceryTrip {
-//    var budget = Double
-//    var shoppingList = [GroceryItem : Bool]
-//    var cart = [GroceryItem]
-//    
+class GroceryTrip {
+    var budget: Double
+    var shoppingList: [GroceryItem : Bool]
+    var cart: [GroceryItem]
+    
+    init(budget: Double, shoppingList: [GroceryItem : Bool], cart: [GroceryItem]) {
+        self.budget = budget
+        self.shoppingList = shoppingList
+        self.cart = cart
+    }
+
 //    var taxRate
 //    var totalCost =
-//    
-//}
+
+}
