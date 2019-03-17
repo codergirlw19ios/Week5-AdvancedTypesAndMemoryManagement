@@ -64,6 +64,13 @@ do {
 //: - Write another function to remove an item from the cart. Take in the parameter of GroceryItem. Remove it from the array, and find the matching item in the shopping list (if it exists) and update the dictionary's boolean to false.
 //: - Write a function to checkout that can throw an error. This function will return the remaining items on the shopping list and the remaining budget in a tuple. If the tax rate is 0.0, return the appropriate error. If the balance is negative, throw the appropriate error. Otherwise, remove everything from the shopping list whose boolean evaluates to true and return everything on the shopping list that wasn't purchased, and return the remaining available budget amount. Do not return a dictionary, but return an array of GroceryItem.
 //: - Write another function to update the tax rate that can throw an error. Take in the appropriate parameter. Be sure to update the total. Throw an error if the new total exceeds the budget.
+enum GroceryTripError: Error {
+    case totalExceedsBudget
+    case excessQuantity
+    case shortQuantity
+    case noTax
+}
+
 struct GroceryItem: Hashable {
     var name: String
     var quantity: Int
@@ -97,16 +104,16 @@ class GroceryTrip {
         self.taxRate = taxRate
     }
 
-    //Total cost and balance should be a read-only computed variables. The logic for total cost should use the reduce higher order function on the cart. If an item has no cost stored in the optional value, return the accumulating total. Otherwise, return the cost of the item multiplied times it's quantity added to the accumulating total. After you complete the reduce method, multiply the result with the tax rate and return the total as the computed value. The logic for balance should simply subtract the total from the budget.
     var totalCost: Double {
        let accumulatingTotal = cart.reduce(0) { (result, nextValue) -> Double in
             return result + (nextValue.cost! * Double(nextValue.quantity))
         }
-        //taxRate is a percentage so, divide it by 100 and add 1 so totalCost = accumulatingTotal PLUS tax
+        //taxRate is a percentage so divide it by 100 and add 1 so totalCost = accumulatingTotal PLUS tax
         return accumulatingTotal * (1 + (taxRate / 100))
     }
     
     var balance: Double {
         return budget - totalCost
     }
+    
 }
