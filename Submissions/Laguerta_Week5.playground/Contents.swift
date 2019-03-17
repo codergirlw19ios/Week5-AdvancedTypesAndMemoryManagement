@@ -105,4 +105,8 @@ class GroceryTrip {
         //taxRate is a percentage so, divide it by 100 and add 1 so totalCost = accumulatingTotal PLUS tax
         return accumulatingTotal * (1 + (taxRate / 100))
     }
+    
+    var balance: Double {
+        return budget - totalCost
+    }
 }
