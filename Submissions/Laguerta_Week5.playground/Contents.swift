@@ -87,6 +87,7 @@ class GroceryTrip {
     var budget: Double
     var shoppingList: [GroceryItem : Bool]
     var cart: [GroceryItem]
+    //A PERCENTAGE
     var taxRate: Double
     
     init(budget: Double, shoppingList: [GroceryItem : Bool], cart: [GroceryItem], taxRate: Double) {
@@ -95,7 +96,13 @@ class GroceryTrip {
         self.cart = cart
         self.taxRate = taxRate
     }
-    
-//    var totalCost =
 
+    //Total cost and balance should be a read-only computed variables. The logic for total cost should use the reduce higher order function on the cart. If an item has no cost stored in the optional value, return the accumulating total. Otherwise, return the cost of the item multiplied times it's quantity added to the accumulating total. After you complete the reduce method, multiply the result with the tax rate and return the total as the computed value. The logic for balance should simply subtract the total from the budget.
+    var totalCost: Double {
+       let accumulatingTotal = cart.reduce(0) { (result, nextValue) -> Double in
+            return result + (nextValue.cost! * Double(nextValue.quantity))
+        }
+        //taxRate is a percentage so, divide it by 100 and add 1 so totalCost = accumulatingTotal PLUS tax
+        return accumulatingTotal * (1 + (taxRate / 100))
+    }
 }
