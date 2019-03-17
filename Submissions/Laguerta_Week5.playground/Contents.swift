@@ -97,13 +97,17 @@ class GroceryTrip {
     //A PERCENTAGE
     var taxRate: Double
     
-    init(budget: Double, shoppingList: [GroceryItem : Bool], cart: [GroceryItem], taxRate: Double) {
+    init(budget: Double, shoppingListArray: [GroceryItem], taxRate: Double) {
         self.budget = budget
-        self.shoppingList = shoppingList
-        self.cart = cart
+        let shoppingListSet = Set(shoppingListArray)
+        let shoppingListMap = shoppingListSet.map({(groceryItem: GroceryItem) -> (groceryItem: GroceryItem, inCart: Bool) in return (groceryItem, false)})
+        
+        shoppingList = Dictionary(uniqueKeysWithValues: shoppingListMap)
+
         self.taxRate = taxRate
     }
 
+    
     var totalCost: Double {
        let accumulatingTotal = cart.reduce(0) { (result, nextValue) -> Double in
             return result + (nextValue.cost! * Double(nextValue.quantity))
@@ -116,4 +120,6 @@ class GroceryTrip {
         return budget - totalCost
     }
     
+
 }
+
