@@ -69,6 +69,7 @@ enum GroceryTripError: Error {
     case excessQuantity
     case shortQuantity
     case noTax
+    case unplannedGroceryItem
 }
 
 struct GroceryItem: Hashable {
@@ -120,6 +121,32 @@ class GroceryTrip {
         return budget - totalCost
     }
     
+    func addToCart(cost: Double, quantity: Int, item: GroceryItem) throws {
+        //If the string does not match any of the GroceryItems' names in the shopping list dictionary, throw the appropriate error.
+        guard shoppingList.contains(where: {$0.key.name == item.name}) else {
+            throw GroceryTripError.unplannedGroceryItem
+        }
+        
+        //If the quantity does not match the GroceryItem's quantity in the shopping list dictionary, throw the appropriate error.
+        guard shoppingList.contains(where: {$0.key.name == item.name && $0.key.quantity == item.quantity}) else {
+            if shoppingList.contains(where: {$0.key.name == item.name && $0.key.quantity < item.quantity}) {
+                throw GroceryTripError.shortQuantity } else {
+                    throw GroceryTripError.excessQuantity }
+            }
+        
+        //If the quantity matches, update the dictionary's boolean to true and add the GroceryItem with cost to the cart array. Check the new balance and throw an error if necessary.
+        
+        if shoppingList.contains(where: {$0.key.name == item.name && $0.key.quantity == item.quantity}) {
+            let groceryItem = GroceryItem(name: item.name, quantity: quantity, cost: cost)
+            shoppingList[groceryItem] = true
+            cart.append(item)
+            
+            guard balance <= budget else {
+                throw GroceryTripError.totalExceedsBudget
+            }
+        }
+        
+    }
 
 }
 
