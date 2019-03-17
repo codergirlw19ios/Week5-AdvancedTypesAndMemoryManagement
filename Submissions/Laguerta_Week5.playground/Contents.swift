@@ -36,7 +36,7 @@ do {
     //let error = "Can't seem to find this printer"
     //throw PrinterError.onFire --to trigger first catch block
     //throw PrinterError.outOfPaper //to throw second catch block
-    throw ConnectError.connect //for third catch block, I create a different Error enum 
+    throw ConnectError.connect //for third catch block, I create a different Error enum
 } catch PrinterError.onFire {
     print("I'll just put this over here, with the rest of the fire.")
 } catch let printerError as PrinterError {
@@ -87,14 +87,15 @@ class GroceryTrip {
     var budget: Double
     var shoppingList: [GroceryItem : Bool]
     var cart: [GroceryItem]
+    var taxRate: Double
     
-    init(budget: Double, shoppingList: [GroceryItem : Bool], cart: [GroceryItem]) {
+    init(budget: Double, shoppingList: [GroceryItem : Bool], cart: [GroceryItem], taxRate: Double) {
         self.budget = budget
         self.shoppingList = shoppingList
         self.cart = cart
+        self.taxRate = taxRate
     }
-
-//    var taxRate
+    
 //    var totalCost =
 
 }
