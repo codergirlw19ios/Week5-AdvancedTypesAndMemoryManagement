@@ -151,7 +151,7 @@ class GroceryTrip {
     //Write another function to remove an item from the cart. Take in the parameter of GroceryItem. Remove it from the array, and find the matching item in the shopping list (if it exists) and update the dictionary's boolean to false.
     
     func removeFromCart (groceryItem: GroceryItem){
-        if let itemIndex = cart.index(of:groceryItem){
+        if let itemIndex = cart.index(of: groceryItem){
             cart.remove(at: itemIndex)
         }
         
@@ -160,6 +160,28 @@ class GroceryTrip {
         }
         
     }
-
+    
+    //Write a function to checkout that can throw an error. This function will return the remaining items on the shopping list and the remaining budget in a tuple. If the tax rate is 0.0, return the appropriate error. If the balance is negative, throw the appropriate error. Otherwise, remove everything from the shopping list whose boolean evaluates to true and return everything on the shopping list that wasn't purchased, and return the remaining available budget amount. Do not return a dictionary, but return an array of GroceryItem.
+    func checkout(taxRate: Double, balance: Double, shoppingList: [GroceryItem]) throws -> (remainingBudget: Double, nonPurchasedItems: [GroceryItem])  {
+        if taxRate == 0.0 {
+            throw GroceryTripError.noTax
+        }
+        
+        if balance < 0.0 {
+            throw GroceryTripError.totalExceedsBudget
+        }
+        
+        var nonPurchasedItems = [GroceryItem]()
+        
+        for (item, inCart) in shoppingList {
+            if inCart == true {
+                shoppingList.removeValue(forKey: item)
+            } else {
+                nonPurchasedItems.append(item)
+            }
+        }
+      
+        return ( budget, nonPurchasedItems )
+    }
 }
 
