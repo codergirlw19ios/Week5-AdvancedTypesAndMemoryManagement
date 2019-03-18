@@ -183,5 +183,15 @@ class GroceryTrip {
       
         return ( budget, nonPurchasedItems )
     }
+    
+    //Write another function to update the tax rate that can throw an error. Take in the appropriate parameter. Be sure to update the total. Throw an error if the new total exceeds the budget.
+    func updateTaxRate(taxRate: Double) throws {
+        self.taxRate = taxRate
+        
+        let newTotal = totalCost
+        guard newTotal <= budget else {
+            throw GroceryTripError.totalExceedsBudget
+        }
+    }
 }
 
