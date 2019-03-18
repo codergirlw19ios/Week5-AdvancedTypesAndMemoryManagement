@@ -147,6 +147,19 @@ class GroceryTrip {
         }
         
     }
+    
+    //Write another function to remove an item from the cart. Take in the parameter of GroceryItem. Remove it from the array, and find the matching item in the shopping list (if it exists) and update the dictionary's boolean to false.
+    
+    func removeFromCart (groceryItem: GroceryItem){
+        if let itemIndex = cart.index(of:groceryItem){
+            cart.remove(at: itemIndex)
+        }
+        
+        if shoppingList.contains(where: { $0.key.name == groceryItem.name }) {
+            shoppingList[groceryItem] = false
+        }
+        
+    }
 
 }
 
