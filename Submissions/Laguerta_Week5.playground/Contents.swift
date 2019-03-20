@@ -92,11 +92,11 @@ struct GroceryItem: Hashable {
 }
 
 class GroceryTrip {
-    var budget: Double
-    var shoppingList: [GroceryItem : Bool]
-    var cart: [GroceryItem]
+    private var budget: Double
+    private var shoppingList: [GroceryItem : Bool]
+    private var cart: [GroceryItem]
     //A PERCENTAGE
-    var taxRate: Double
+    private var taxRate: Double
     
     init(budget: Double, shoppingListArray: [GroceryItem], taxRate: Double) {
         self.budget = budget
